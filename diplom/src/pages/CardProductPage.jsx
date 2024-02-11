@@ -12,15 +12,20 @@ const CardProductPage = () => {
     const [sizes, setSizes] = useState([]);
     const [selectedSize, setSelectedSizes] = useState(""); 
     const [quantity, setQuantity] = useState(1);
+    const [error, setError] = useState(false)
 
     const { card, isLoading } = useSelector((state) => state.card)
+    // const { cart, isLoad } =  useSelector((state) => state.cart)
+    // console.log(cart)
+    // const cards = JSON.parse(localStorage.getItem('cart'));
+    // console.log( card)
     
     const { id } = useParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     
     useEffect(() => {
-      dispatch(getCard({ id }))
+      dispatch(getCard({ id }, setError))
     }, [])
 
     useEffect(() => {
@@ -28,7 +33,7 @@ const CardProductPage = () => {
     }, [card]);
 
     const addToCart = () => { 
-      let selectedCard = {
+      const selectedCard = {
         id: card.id,
         title: card.title,
         size: selectedSize,
@@ -51,6 +56,8 @@ const CardProductPage = () => {
     const handleIncr = () => {
       if (quantity < 10) setQuantity(quantity + 1);
     };
+
+    if (error) return <button className="btn-return" onClick={() => dispatch(getCard({ id }, setError))}>Попробовать снова</button>
 
     return isLoading ? <Loader /> : card && card.id ? (
           <section className="catalog-data">

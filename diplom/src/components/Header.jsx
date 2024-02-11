@@ -21,6 +21,18 @@ const Header = () => {
         setSearch((prev) => ({ ...prev, active: !search.active }));
     }
 
+    const keyDownHandler = (event) => {
+        if (event.keyCode === 13) {
+          event.preventDefault()
+          if (search.active) {
+            dispatch(searchActions.change(search.value));
+            setSearch(initialState);
+            navigate("/catalog.html")
+        } else 
+        setSearch((prev) => ({ ...prev, active: !search.active }));
+        }
+      }
+
     const onChange = (e) => {
         const { value } = e.target;
         setSearch((prev) => ({ ...prev, value: value }));
@@ -71,7 +83,7 @@ const Header = () => {
                                         search.active ? "header-controls-search-form form-inline"
                                         : "header-controls-search-form form-inline invisible"
                                     }>
-                                        <input className="form-control" placeholder="Поиск" value={search.text} onChange={onChange}/>
+                                        <input className="form-control" placeholder="Поиск" value={search.text} onChange={onChange} onKeyDown={keyDownHandler}/>
                                     </form>
                                     </div>
                             </div>

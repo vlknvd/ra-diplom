@@ -7,7 +7,6 @@ import { addOrder, createOrder } from "../store/order/orderSlice"
 import { changeOwner } from "../store/order/orderSlice"
 import { removeFromCart } from "../store/cart/cartSlice"
 
-
 const CartPage = () => {
     const { cart } = useSelector((state) => state.cart)
 
@@ -74,7 +73,7 @@ const CartPage = () => {
                   <td colSpan="5" className="text-right">
                     Общая стоимость
                   </td>
-                  <td>{`${cart.reduce((sum, item) => sum + item.price * item.count, 0)} руб.`}</td>
+                  <td>{`${cart ? cart.reduce((sum, item) => sum + item.price * item.count, 0) : 0} руб.`}</td>
                 </tr>
               </tbody>
             </table>

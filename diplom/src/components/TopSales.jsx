@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 
 import { getTopSale } from "../store/topSale/topSale";
@@ -10,10 +10,17 @@ import Loader from "./Loader";
 const TopSales = () => {
     const dispatch = useDispatch();
     const { list, isLoading } = useSelector(({ topSales })=> topSales)
+    const [error, setError] = useState(false)
 
     useEffect(() => {
-        dispatch(getTopSale())
+        dispatch(getTopSale(setError))
     }, [])
+
+    const onClick = () => {
+        dispatch(getTopSale(setError))
+    }
+
+    if(error) return <button className="btn-return" onClick={onClick}>Попробовать снова</button>
 
     return isLoading ? <Loader/> : list && list.length > 0 ? (
         <section className="top-sales">

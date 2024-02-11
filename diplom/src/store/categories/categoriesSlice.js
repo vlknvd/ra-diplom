@@ -3,12 +3,12 @@ import axios from 'axios'
 
 export const getCategories = createAsyncThunk(
     'categories/getCategories',
-    async(_, thunkAPI) => {
+    async(_, setError, thunkAPI) => {
         try{
             const res = await axios('http://localhost:7070/api/categories')
             return res.data
         } catch (err) {
-            console.log(err);
+            setError(err)
             return thunkAPI.rejectWithValue(err)
         }
     }

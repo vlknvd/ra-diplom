@@ -40,7 +40,6 @@ const orderSlice = createSlice({
             state.owner = payload
         },
         addOrder: (state, payload) => {
-            // state.order = localStorage.getItem('cart') || []
             state.order = payload
         } 
     },

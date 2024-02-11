@@ -10,6 +10,7 @@ const ProductList = () => {
     const [items, setItems] = useState([]);
     const [loadMore, setLoadMore] = useState([])
     const [count, setCount] = useState(false);
+    const [offsetCount, setOffsetCount] = useState(6)
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
     
@@ -29,8 +30,9 @@ const ProductList = () => {
     }
   
     let loadMoreURL = 'http://localhost:7070/api/items?offset=6';
+    
     if (current !== 0) {
-      loadMoreURL = `http://localhost:7070/api/items?categoryId=${current.id}&offset=6`;
+      loadMoreURL = `http://localhost:7070/api/items?categoryId=${current.id}&offset=${offsetCount}`;
     }
 
     useEffect(() => {
@@ -41,6 +43,9 @@ const ProductList = () => {
     const onClick = () => {
         sendRequest(loadMoreURL, setLoadMore, setCount, setError, setIsLoading)
     }
+
+    if (error) return <button className="btn-return" onClick={onClick}>Попробовать снова</button>
+    if (!items.length) return <h2 className="error-text">Ничего не найдено</h2>
 
     return isLoading ? <Loader/> : (
         <div className="row">

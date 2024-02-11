@@ -3,12 +3,12 @@ import axios from 'axios'
 
 export const getCard = createAsyncThunk(
     'items/getItems',
-    async({id}, thunkAPI) => {
+    async({id}, setError, thunkAPI) => {
         try{
             const res = await axios(`http://localhost:7070/api/items/${id}`)
             return res.data
         } catch (err) {
-            console.log(err);
+            setError(err)
             return thunkAPI.rejectWithValue(err)
         }
     }

@@ -8,7 +8,6 @@ async function sendRequest(url, setItems, setCount, setError, setIsLoading){
       }
       const data = await response.json();
       setItems(data);
-
       if (data.length < 6) {
         setCount(false);
       } else {
