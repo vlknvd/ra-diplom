@@ -4,16 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeCategories, getCategories } from "../store/categories/categoriesSlice"
 
 import Loader from "./Loader";
+import Error from "./Error";
 
 const Categories = () => {
-    const { list, isLoading } = useSelector(({ categories }) => categories)
+    const { list, isLoading, error } = useSelector(({ categories }) => categories)
     const current = useSelector(({ categories }) => categories.current)
-    const [error, setError] = useState(false)
     
     const dispatch = useDispatch()
     
     useEffect(() => {
-        dispatch(getCategories(setError))
+        dispatch(getCategories())
     }, [])
 
     const onClick = (e, id) => {
@@ -22,10 +22,12 @@ const Categories = () => {
     }
 
     const returnRequest = () => {
-        dispatch(getCategories(setError))
+        dispatch(getCategories())
     }
 
-    if(error) return <button className="btn-return" onClick={returnRequest}>Попробовать снова</button>
+    if (error) {
+        return <Error error={error.message} func={returnRequest} />
+    }
 
     return isLoading ? <Loader /> : ( 
         <ul className="catalog-categories nav justify-content-center">

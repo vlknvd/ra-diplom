@@ -5,13 +5,14 @@ import sendRequest from "../function/sendRequest"
 
 import ProductItem from "./ProductItem"
 import Loader from "./Loader"
+import Error from "./Error"
 
 const ProductList = () => {
     const [items, setItems] = useState([]);
     const [loadMore, setLoadMore] = useState([])
     const [count, setCount] = useState(false);
     const [offsetCount, setOffsetCount] = useState(6)
-    const [error, setError] = useState(null);
+    const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(false)
     
     const searchValue = useSelector((state) => state.search.value);
@@ -29,7 +30,7 @@ const ProductList = () => {
       URL = `http://localhost:7070/api/items?categoryId=${current.id}&q=${searchValue.toLowerCase()}`;
     }
   
-    let loadMoreURL = 'http://localhost:7070/api/items?offset=6';
+    let loadMoreURL = `http://localhost:7070/api/items?offset=${offsetCount}`;
     
     if (current !== 0) {
       loadMoreURL = `http://localhost:7070/api/items?categoryId=${current.id}&offset=${offsetCount}`;
@@ -44,14 +45,15 @@ const ProductList = () => {
         sendRequest(loadMoreURL, setLoadMore, setCount, setError, setIsLoading)
     }
 
-    if (error) return <button className="btn-return" onClick={onClick}>Попробовать снова</button>
-    if (!items.length) return <h2 className="error-text">Ничего не найдено</h2>
+    if (error) {
+        return <Error error={error} func={() => sendRequest(URL, setItems, setCount, setError, setIsLoading)} />
+    }
 
     return isLoading ? <Loader/> : (
         <div className="row">
-            {items.map((el) => (
+            {items.length ? items.map((el) => (
                 <ProductItem key={el.id} item={el}/>
-            ))}
+            )) : <h2 className="error-text">Ничего не найдено</h2>}
             {loadMore.map((el) => (
                 <ProductItem key={el.id} item={el} />
             ))}

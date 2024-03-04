@@ -3,23 +3,18 @@ import axios from 'axios'
 
 export const getCategories = createAsyncThunk(
     'categories/getCategories',
-    async(_, setError, thunkAPI) => {
-        try{
-            const res = await axios('http://localhost:7070/api/categories')
-            return res.data
-        } catch (err) {
-            setError(err)
-            return thunkAPI.rejectWithValue(err)
-        }
+    async() => {
+        const res = await axios('http://localhost:7070/api/categories')
+        return res.data
     }
-
 )
 const categoriesSlice = createSlice({
     name: 'categories',
     initialState: {
         current: 0,
         list: [],
-        isLoading: false
+        isLoading: false,
+        error: null,
     },
     reducers: {
         changeCategories: ( state, { payload }) => {
@@ -46,6 +41,9 @@ const categoriesSlice = createSlice({
         builder.addCase(getCategories.fulfilled, (state, { payload }) => {
             state.list = payload;
             state.isLoading = false
+        });
+        builder.addCase(getCategories.rejected, (state, { error }) => {
+            state.error = error
         })
     }
 })

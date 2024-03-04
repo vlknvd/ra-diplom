@@ -174,9 +174,9 @@ section {
   margin-bottom: 2em;
 }
 
-.col-4 {
+/* .col-4 {
   display: flex;
-}
+} */
 
 .catalog-item-card {
   margin-bottom: 1em;
@@ -218,15 +218,15 @@ section {
   box-shadow: none;
 }
 
-/* .row {
-  display: flex;
-  align-items: stretch;
-}
-
 .col-4 {
   display: flex;
-  width: 30%;
-} */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content:end;
+}
 
 /* Footer */
 .footer {
@@ -333,6 +333,8 @@ h2, .h2 {
 
 .error-text {
   text-align: center;
+  font-size: 26px;
+  color: rgb(208, 17, 17);
   margin-bottom: 30px;
 }
 
@@ -342,6 +344,7 @@ h2, .h2 {
   background-color: white;
   border: 1px solid #0d6efd;
   border-radius: 10px;
+  margin-bottom: 30px;
  
   width: 20%;
   height: 50px;

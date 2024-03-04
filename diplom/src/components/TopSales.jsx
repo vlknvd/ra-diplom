@@ -5,22 +5,24 @@ import { getTopSale } from "../store/topSale/topSale";
 
 import ProductItem from "./ProductItem";
 import Loader from "./Loader";
-
+import Error from "./Error";
 
 const TopSales = () => {
     const dispatch = useDispatch();
-    const { list, isLoading } = useSelector(({ topSales })=> topSales)
-    const [error, setError] = useState(false)
+    const { list, isLoading, error } = useSelector(({ topSales })=> topSales)
+    // const [error, setError] = useState(false)
 
     useEffect(() => {
-        dispatch(getTopSale(setError))
+        dispatch(getTopSale())
     }, [])
 
     const onClick = () => {
-        dispatch(getTopSale(setError))
+        dispatch(getTopSale())
     }
 
-    if(error) return <button className="btn-return" onClick={onClick}>Попробовать снова</button>
+    if (error) {
+        return <Error error={error.message} func={onClick} />
+    }
 
     return isLoading ? <Loader/> : list && list.length > 0 ? (
         <section className="top-sales">

@@ -7,25 +7,24 @@ import { addItemToCart } from '../store/cart/cartSlice'
 import { getCard } from '../store/card/cardSlice'
 
 import Loader from '../components/Loader'
+import Error from '../components/Error'
 
 const CardProductPage = () => {
     const [sizes, setSizes] = useState([]);
     const [selectedSize, setSelectedSizes] = useState(""); 
     const [quantity, setQuantity] = useState(1);
-    const [error, setError] = useState(false)
+    // const [error, setError] = useState()
 
-    const { card, isLoading } = useSelector((state) => state.card)
-    // const { cart, isLoad } =  useSelector((state) => state.cart)
-    // console.log(cart)
-    // const cards = JSON.parse(localStorage.getItem('cart'));
-    // console.log( card)
+    const { card, isLoading, error } = useSelector((state) => state.card)
+    // const { error } = useSelector((state) => state.card)
+    // console.log(error)
     
     const { id } = useParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     
     useEffect(() => {
-      dispatch(getCard({ id }, setError))
+      dispatch(getCard(id))
     }, [])
 
     useEffect(() => {
@@ -56,8 +55,10 @@ const CardProductPage = () => {
     const handleIncr = () => {
       if (quantity < 10) setQuantity(quantity + 1);
     };
-
-    if (error) return <button className="btn-return" onClick={() => dispatch(getCard({ id }, setError))}>Попробовать снова</button>
+    
+    if (error) {
+      return <Error error={error.message} func={() => dispatch(getCard(id))} />
+    }
 
     return isLoading ? <Loader /> : card && card.id ? (
           <section className="catalog-data">

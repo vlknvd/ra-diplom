@@ -3,14 +3,9 @@ import axios from 'axios'
 
 export const getCard = createAsyncThunk(
     'items/getItems',
-    async({id}, setError, thunkAPI) => {
-        try{
-            const res = await axios(`http://localhost:7070/api/items/${id}`)
-            return res.data
-        } catch (err) {
-            setError(err)
-            return thunkAPI.rejectWithValue(err)
-        }
+    async(id) => {
+        const res = await axios(`http://localhost:7070/api/items/${id}`)
+        return res.data
     }
 )
 
@@ -19,6 +14,7 @@ const cardSlice = createSlice({
     initialState: {
         card: [],
         isLoading: false,
+        error: null,
     },
     extraReducers: (builder) => {
         builder.addCase(getCard.pending, (state) => {
@@ -27,6 +23,9 @@ const cardSlice = createSlice({
         builder.addCase(getCard.fulfilled, (state, { payload }) => {
             state.card = payload;
             state.isLoading = false;
+        })
+        builder.addCase(getCard.rejected, (state, { error }) => {
+            state.error = error
         })
     }
 })

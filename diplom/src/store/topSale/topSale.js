@@ -3,14 +3,9 @@ import axios from 'axios'
 
 export const getTopSale = createAsyncThunk(
     'topSale/getTopSale',
-    async(_, setError, thunkAPI) => {
-        try{
-            const res = await axios('http://localhost:7070/api/top-sales')
-            return res.data
-        } catch (err) {
-            setError(err)
-            return thunkAPI.rejectWithValue(err)
-        }
+    async() => {
+        const res = await axios('http://localhost:7070/api/top-sales')
+        return res.data
     }
 )
 
@@ -19,6 +14,7 @@ const topSaleSlice = createSlice({
     initialState: {
         list: [],
         isLoading: false,
+        error: null,
     },
     extraReducers: (builder) => {
         builder.addCase(getTopSale.pending, (state) => {
@@ -27,6 +23,9 @@ const topSaleSlice = createSlice({
         builder.addCase(getTopSale.fulfilled, (state, { payload }) => {
             state.list = payload;
             state.isLoading = false;
+        });
+        builder.addCase(getTopSale.rejected, (state, { error }) => {
+            state.error = error
         })
     }
 })
