@@ -18,14 +18,19 @@ const topSaleSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(getTopSale.pending, (state) => {
-            state.isLoading = true
+            state.isLoading = true;
+            state.error = null;
+            state.list = [];
         });
         builder.addCase(getTopSale.fulfilled, (state, { payload }) => {
-            state.list = payload;
             state.isLoading = false;
+            state.list = payload;
+            state.error = null;
         });
         builder.addCase(getTopSale.rejected, (state, { error }) => {
-            state.error = error
+            state.isLoading = false;
+            state.list = [];
+            state.error = error;
         })
     }
 })

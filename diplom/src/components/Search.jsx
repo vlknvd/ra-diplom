@@ -1,31 +1,35 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { searchActions } from "../store/search/searchSlice";
+import { getItems } from "../store/catalog/catalogSlice";
 
 const Search = () => {
     const searchValue = useSelector((state) => state.search.value);
+    const current = useSelector(({ categories }) => categories.current);
     const [searchInputValue, setSearchInputValue] = useState(searchValue);
     const dispatch = useDispatch();
+    const inputEl = createRef()
 
     useEffect(() => {
-      setSearchInputValue(searchValue);
-    }, [searchValue]);
-  
-    const keyDownHandler = (event) => {
-      if (event.keyCode === 13) {
-        event.preventDefault()
-        dispatch(searchActions.change(searchInputValue));
-      }
-    }
+      inputEl.current.focus()
+    }, [inputEl])
   
     const changeInputHandler = (event) => {
-      setSearchInputValue(event.target.value);
+      dispatch(searchActions.change(event.target.value))
     };
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        dispatch(getItems({
+          categoryId: current.id,
+          q: searchValue
+      }));
+    }
 
     return (
       <>
-        <form className="catalog-search-form form-inline">
-          <input className="form-control" placeholder="Поиск" value={searchInputValue} onKeyDown={keyDownHandler} onChange={changeInputHandler}/>
+        <form className="catalog-search-form form-inline" onSubmit={onSubmit}>
+          <input className="form-control" placeholder="Поиск" ref={inputEl} value={searchValue} onChange={changeInputHandler}/>
         </form>
       </>
     );

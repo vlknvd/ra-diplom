@@ -25,12 +25,11 @@ const Categories = () => {
         dispatch(getCategories())
     }
 
-    if (error) {
-        return <Error error={error.message} func={returnRequest} />
-    }
-
-    return isLoading ? <Loader /> : ( 
-        <ul className="catalog-categories nav justify-content-center">
+    return ( 
+        <>
+        {isLoading && <Loader />}
+        {error && <Error error={error.message} func={returnRequest}/>}
+        {<ul className="catalog-categories nav justify-content-center">
             <li className="nav-item">
                 <a className={current === 0 ? "nav-link active" : "nav-link"} href="#" onClick={(e) => onClick(e, 0)}>
                 Все
@@ -43,7 +42,8 @@ const Categories = () => {
                     </a>
                 </li>
             ))}
-        </ul> 
+        </ul>}
+        </>
     )
 }
 

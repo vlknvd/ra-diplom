@@ -13,11 +13,8 @@ const CardProductPage = () => {
     const [sizes, setSizes] = useState([]);
     const [selectedSize, setSelectedSizes] = useState(""); 
     const [quantity, setQuantity] = useState(1);
-    // const [error, setError] = useState()
 
     const { card, isLoading, error } = useSelector((state) => state.card)
-    // const { error } = useSelector((state) => state.card)
-    // console.log(error)
     
     const { id } = useParams()
     const dispatch = useDispatch()
@@ -56,11 +53,11 @@ const CardProductPage = () => {
       if (quantity < 10) setQuantity(quantity + 1);
     };
     
-    if (error) {
-      return <Error error={error.message} func={() => dispatch(getCard(id))} />
-    }
-
-    return isLoading ? <Loader /> : card && card.id ? (
+    return (
+      <>
+      {isLoading && <Loader />}
+      {error && <Error error={error.message} func={() => dispatch(getCard(id))} />}
+      {card && card.id ? 
           <section className="catalog-data">
             <h2 className="text-center">{card.title}</h2>
             <div className="row">
@@ -150,7 +147,9 @@ const CardProductPage = () => {
               </div>
             </div>
           </section>
-    ) : null
+      : null}
+      </>
+    )
 }
 
 export default CardProductPage

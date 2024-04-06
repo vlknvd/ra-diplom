@@ -36,14 +36,19 @@ const categoriesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(getCategories.pending, (state) => {
-            state.isLoading = true
+            state.isLoading = true;
+            state.list = [];
+            state.error = null
         });
         builder.addCase(getCategories.fulfilled, (state, { payload }) => {
             state.list = payload;
-            state.isLoading = false
+            state.isLoading = false;
+            state.error = null;
         });
         builder.addCase(getCategories.rejected, (state, { error }) => {
-            state.error = error
+            state.list = [];
+            state.error = error;
+            state.isLoading = false;
         })
     }
 })

@@ -19,12 +19,17 @@ const cardSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getCard.pending, (state) => {
             state.isLoading = true
+            state.card = [];
+            state.error = null
         });
         builder.addCase(getCard.fulfilled, (state, { payload }) => {
             state.card = payload;
             state.isLoading = false;
+            state.error = null
         })
         builder.addCase(getCard.rejected, (state, { error }) => {
+            state.isLoading = false
+            state.card = []
             state.error = error
         })
     }

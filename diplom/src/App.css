@@ -174,10 +174,6 @@ section {
   margin-bottom: 2em;
 }
 
-/* .col-4 {
-  display: flex;
-} */
-
 .catalog-item-card {
   margin-bottom: 1em;
   height: 50%;
@@ -190,6 +186,7 @@ section {
   color: rgb(4, 109, 247);
   text-decoration: underline dashed;
   text-underline-offset: 4px;
+  cursor: pointer;
 }
 
 .catalog-item-size.selected {
@@ -226,6 +223,11 @@ section {
   display: flex;
   flex-direction: column;
   justify-content:end;
+}
+
+.btn-outline-primary.more {
+  width: auto;
+  margin: 0 auto;
 }
 
 /* Footer */

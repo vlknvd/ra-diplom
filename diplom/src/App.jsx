@@ -18,10 +18,10 @@ function App() {
       <Header />
       <Banner>
         <Routes>
-          <Route path="/about.html" element={<AboutPage />}/>
+          <Route path="/about" element={<AboutPage />}/>
           <Route path="/catalog/:id" element={<CardProductPage />} />
-          <Route path="/contacts.html" element={<ContactsPage />} />
-          <Route path="/catalog.html" element={<CatalogPage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
+          <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/*" element={<Page404 />} />
           <Route path='/' element={<HomePage />} />

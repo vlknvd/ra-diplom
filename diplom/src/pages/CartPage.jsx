@@ -3,29 +3,42 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
-import { addOrder, createOrder } from "../store/order/orderSlice"
-import { changeOwner } from "../store/order/orderSlice"
-import { removeFromCart } from "../store/cart/cartSlice"
+import { addOrder, createOrder, resetForm } from "../store/order/orderSlice"
+import { clearCart, removeFromCart } from "../store/cart/cartSlice"
+import Loader from "../components/Loader"
+import Error from "../components/Error"
 
 const CartPage = () => {
     const { cart } = useSelector((state) => state.cart)
+    const { isLoading, error } = useSelector((state) => state.order)
+    console.log(!error)
 
-    const [phone, setPhone] = useState()
-    const [address, setAdd] = useState()
+    const [phone, setPhone] = useState('')
+    const [address, setAdress] = useState('')
 
     const dispatch = useDispatch()
 
-    const onClick = (e) => {
+    const onSubmit = (e) => {
       e.preventDefault()
-      const obj = {'phone': phone, 'address': address}
       const order = {
-        owner: obj,
-        order: cart
+        owner: {
+          phone: phone,
+          address: address
+        },
+        order: cart.map(el => ({ id: el.id, price: el.price, count: el.quantity }))
       }
-      console.log(order)
-      dispatch(changeOwner(obj))
-      dispatch(addOrder(cart))
+      dispatch(addOrder(order))
       dispatch(createOrder(order))
+      dispatch(resetForm())
+    }
+
+    const onChange = (e) => {
+      e.preventDefault()
+      if(e.target.id === 'phone') {
+        setPhone(e.target.value)
+      } else if (e.target.id === 'address') {
+        setAdress(e.target.value)
+      }
     }
 
     const onRemove = (id) => {
@@ -78,50 +91,53 @@ const CartPage = () => {
               </tbody>
             </table>
           </section>
+          {isLoading && <Loader />}
+          {error && <div style={{padding: '20px' }}>Что-то пошло не так...</div>}
+          {cart.length > 0 && !error &&
           <section className="order">
-            <h2 className="text-center">Оформить заказ</h2>
-            <div className="card">
-              <form className="card-body" > 
-                <div className="form-group">
-                  <label htmlFor="phone">Телефон</label>
-                  <input
-                    className="form-control"
-                    id="phone"
-                    placeholder="Ваш телефон"
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="address">Адрес доставки</label>
-                  <input
-                    className="form-control"
-                    id="address"
-                    placeholder="Адрес доставки"
-                    onChange={(e) => setAdd(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-group form-check">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="agreement"
-                    required
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="agreement"
-                  >
-                    Согласен с правилами доставки
-                  </label>
-                </div>
-                <button type="submit" className="btn btn-outline-secondary" onClick={(e) => onClick(e)}>
-                  Оформить
-                </button>
-              </form>
-            </div>
-          </section>
+          <h2 className="text-center">Оформить заказ</h2>
+          <div className="card">
+            <form className="card-body" onSubmit={onSubmit} > 
+              <div className="form-group">
+                <label htmlFor="phone">Телефон</label>
+                <input
+                  className="form-control"
+                  id="phone"
+                  placeholder="Ваш телефон"
+                  onChange={onChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="address">Адрес доставки</label>
+                <input
+                  className="form-control"
+                  id="address"
+                  placeholder="Адрес доставки"
+                  onChange={onChange}
+                  required
+                />
+              </div>
+              <div className="form-group form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="agreement"
+                  required
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="agreement"
+                >
+                  Согласен с правилами доставки
+                </label>
+              </div>
+              <button type="submit" className="btn btn-outline-secondary">
+                Оформить
+              </button>
+            </form>
+          </div>
+          </section>}
         </>
     )
 }

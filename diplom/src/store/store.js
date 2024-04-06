@@ -6,6 +6,7 @@ import cartSlice from './cart/cartSlice'
 import cardSlice from './card/cardSlice'
 import orderSlice from './order/orderSlice'
 import searchSlice from './search/searchSlice'
+import catalogSlice from './catalog/catalogSlice'
 
 export const store = configureStore({
   reducer: {
@@ -15,5 +16,6 @@ export const store = configureStore({
     card: cardSlice,
     order: orderSlice,
     search: searchSlice,
+    catalog: catalogSlice
   }
 })

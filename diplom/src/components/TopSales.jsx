@@ -10,7 +10,6 @@ import Error from "./Error";
 const TopSales = () => {
     const dispatch = useDispatch();
     const { list, isLoading, error } = useSelector(({ topSales })=> topSales)
-    // const [error, setError] = useState(false)
 
     useEffect(() => {
         dispatch(getTopSale())
@@ -20,20 +19,22 @@ const TopSales = () => {
         dispatch(getTopSale())
     }
 
-    if (error) {
-        return <Error error={error.message} func={onClick} />
-    }
-
-    return isLoading ? <Loader/> : list && list.length > 0 ? (
-        <section className="top-sales">
-            <h2 className="text-center">Хиты продаж!</h2>
-            <div className="row">
-                {list.map((el) => (
-                    <ProductItem key={el.id} item={el}/>
-                ))}
-            </div>
-        </section>    
-    ) : null
+    return (
+        <>
+            {isLoading && <Loader />}
+            {error && <Error error={error.message} func={onClick}/>}
+            {list.length ?
+            <section className="top-sales">
+                <h2 className="text-center">Хиты продаж!</h2>
+                {isLoading && <Loader />}
+                <div className="row">
+                    {list.map((el) => (
+                        <ProductItem key={el.id} item={el}/>
+                    ))}
+                </div>
+            </section>: null}
+        </>   
+    )
 }
 
 export default TopSales
